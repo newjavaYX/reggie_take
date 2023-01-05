@@ -37,7 +37,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     public void updateFill(MetaObject metaObject) {
         //获取当前用户id
         Long id = BeasContext.getCurrentId();
-        log.info("当前用户id:{}",id);
+        log.info("《--更新--》:当前用户id:{}",id);
         metaObject.setValue("updateTime", LocalDateTime.now());
         metaObject.setValue("update_user",id);
     }

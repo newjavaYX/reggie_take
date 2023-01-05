@@ -1,10 +1,10 @@
 package com.example.reggie.domain;
 
 import java.math.BigDecimal;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
+
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.time.LocalDateTime;
-import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -31,9 +31,10 @@ public class Setmeal implements Serializable {
     private Long id;
 
     /**
-     * 菜品分类id
+     * 套餐分类id
      */
-    private Long category_id;
+    @TableField("category_id")
+    private Long categoryId;
 
     /**
      * 套餐名称
@@ -68,21 +69,25 @@ public class Setmeal implements Serializable {
     /**
      * 创建时间
      */
+    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime create_time;
 
     /**
      * 更新时间
      */
-    private LocalDateTime update_time;
+    @TableField(value = "update_time",fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updateTime;
 
     /**
      * 创建人
      */
+    @TableField(fill = FieldFill.INSERT)
     private Long create_user;
 
     /**
      * 修改人
      */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Long update_user;
 
     /**

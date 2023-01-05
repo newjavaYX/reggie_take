@@ -86,5 +86,13 @@ public class DishController {
 
         return R.success("修改成功");
     }
+
+    @GetMapping("/list")
+    public R<List<Dish>> listDish(Long categoryId){
+        LambdaQueryWrapper<Dish> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Dish::getCategoryId,categoryId);
+        List<Dish> list = dishService.list(queryWrapper);
+        return R.success(list);
+    }
 }
 
