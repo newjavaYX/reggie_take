@@ -1,9 +1,8 @@
 package com.example.reggie.domain;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.time.LocalDateTime;
-import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -32,7 +31,8 @@ public class Address_book implements Serializable {
     /**
      * 用户id
      */
-    private Long user_id;
+    @TableField("user_id")
+    private Long userId;
 
     /**
      * 收货人
@@ -42,7 +42,7 @@ public class Address_book implements Serializable {
     /**
      * 性别 0 女 1 男
      */
-    private Integer sex;
+    private String sex;
 
     /**
      * 手机号
@@ -52,32 +52,38 @@ public class Address_book implements Serializable {
     /**
      * 省级区划编号
      */
-    private String province_code;
+    @TableField("province_code")
+    private String provinceCode;
 
     /**
      * 省级名称
      */
-    private String province_name;
+    @TableField("province_name")
+    private String provinceName;
 
     /**
      * 市级区划编号
      */
-    private String city_code;
+    @TableField("city_code")
+    private String cityCode;
 
     /**
      * 市级名称
      */
-    private String city_name;
+    @TableField("city_name")
+    private String cityName;
 
     /**
      * 区级区划编号
      */
-    private String district_code;
+    @TableField("district_code")
+    private String districtCode;
 
     /**
      * 区级名称
      */
-    private String district_name;
+    @TableField("district_name")
+    private String districtName;
 
     /**
      * 详细地址
@@ -92,32 +98,38 @@ public class Address_book implements Serializable {
     /**
      * 默认 0 否 1是
      */
-    private Boolean is_default;
+    @TableField("is_default")
+    private Integer isDefault;
 
     /**
      * 创建时间
      */
-    private LocalDateTime create_time;
+    @TableField(fill = FieldFill.INSERT,value = "create_time")
+    private LocalDateTime createTime;
 
     /**
      * 更新时间
      */
-    private LocalDateTime update_time;
+    @TableField(fill = FieldFill.INSERT_UPDATE,value ="update_time")
+    private LocalDateTime updateTime;
 
     /**
      * 创建人
      */
-    private Long create_user;
+    @TableField(fill = FieldFill.INSERT,value = "create_user")
+    private Long createUser;
 
     /**
      * 修改人
      */
-    private Long update_user;
+    @TableField(fill = FieldFill.INSERT_UPDATE,value = "update_user")
+    private Long updateUser;
 
     /**
      * 是否删除
      */
-    private Integer is_deleted;
+    @TableField("is_deleted")
+    private Integer isDeleted;
 
 
 }

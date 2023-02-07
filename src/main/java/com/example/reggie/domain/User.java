@@ -1,5 +1,6 @@
 package com.example.reggie.domain;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -46,7 +47,8 @@ public class User implements Serializable {
     /**
      * 身份证号
      */
-    private String id_number;
+    @TableField("id_number")
+    private String idNumber;
 
     /**
      * 头像

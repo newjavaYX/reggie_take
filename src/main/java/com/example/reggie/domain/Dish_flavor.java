@@ -31,7 +31,8 @@ public class Dish_flavor implements Serializable {
     /**
      * 菜品
      */
-    private Long dish_id;
+    @TableField(value = "dish_id")
+    private Long dishId;
 
     /**
      * 口味名称
@@ -46,7 +47,7 @@ public class Dish_flavor implements Serializable {
     /**
      * 创建时间
      */
-    @TableField(fill=FieldFill.INSERT)
+    @TableField(fill=FieldFill.INSERT,value = "create_time")
     private LocalDateTime create_time;
 
     /**
@@ -58,19 +59,20 @@ public class Dish_flavor implements Serializable {
     /**
      * 创建人
      */
-    @TableField(fill= FieldFill.INSERT)
-    private Long create_user;
+    @TableField(fill= FieldFill.INSERT,value = "create_user")
+    private Long createUser;
 
     /**
      * 修改人
      */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Long update_user;
+    @TableField(fill = FieldFill.INSERT_UPDATE,value = "update_user")
+    private Long updateUser;
 
     /**
      * 是否删除
      */
-    private Integer is_deleted;
+    @TableField(value = "is_deleted")
+    private Integer isDeleted;
 
 
 }

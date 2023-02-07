@@ -3,7 +3,6 @@ package com.example.reggie.filters;
 import com.alibaba.fastjson.JSON;
 import com.example.reggie.common.BeasContext;
 import com.example.reggie.common.R;
-import com.example.reggie.domain.Employee;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.AntPathMatcher;
 
@@ -26,26 +25,35 @@ public class LoginCheckFilter implements Filter {
                 "/employee/logout",
                 "/backend/**",
                 "/front/**",
+                "/user/login",
+                "/backend/plugins/axios/axios.min.map",
         };
         //获取请求路径
         String requestURI = request1.getRequestURI();
-        log.info("拦截到请求: " + requestURI);
         //调用方法比较
         boolean check = check(urls, requestURI);
         //如不需要处理直接放行
         if (check) {
-            log.info("此资源无需处理");
+            log.info("拦截到请求: " + requestURI);
             chain.doFilter(request1, response1);
             return;
         //否则判断是否登入
         }else{
+            log.info("拦截到请求: " + requestURI);
             log.info("判断是否登入");
             Object employee = request1.getSession().getAttribute("employee");
+            Object user = request1.getSession().getAttribute("user");
             if (employee != null) {
                 log.info("用户以登入 id为：{}",employee);
                 //将用户id保存到threadLocal中
                 BeasContext.setCurrentId((Long) employee);
-
+                chain.doFilter(request1, response1);
+                return;
+            }
+            if (user != null) {
+                log.info("用户以登入 id为：{}",user);
+                //将用户id保存到threadLocal中
+                BeasContext.setCurrentId((Long) user);
                 chain.doFilter(request1, response1);
                 return;
             }

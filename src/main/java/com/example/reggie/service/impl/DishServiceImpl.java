@@ -78,7 +78,7 @@ public class DishServiceImpl extends ServiceImpl<DishDao, Dish> implements IDish
         //设置菜品关联的口味信息中的菜品id
         List<Dish_flavor> flavors = dishDto.getFlavors();
         flavors.stream().map(item -> {
-            item.setDish_id(id);
+            item.setDishId(id);
             return item;
         }).collect(Collectors.toList());
         log.info("设置菜品关联的口味信息中的菜品id"+flavors);

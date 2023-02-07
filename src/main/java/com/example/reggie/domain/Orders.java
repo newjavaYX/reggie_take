@@ -1,6 +1,8 @@
 package com.example.reggie.domain;
 
 import java.math.BigDecimal;
+
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import java.time.LocalDateTime;
@@ -8,6 +10,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Value;
 
 /**
  * <p>
@@ -43,27 +46,32 @@ public class Orders implements Serializable {
     /**
      * 下单用户
      */
-    private Long user_id;
+    @TableField(value = "user_id")
+    private Long userId;
 
     /**
      * 地址id
      */
-    private Long address_book_id;
+    @TableField(value = "address_book_id")
+    private Long addressBookId;
 
     /**
      * 下单时间
      */
-    private LocalDateTime order_time;
+    @TableField(value = "order_time")
+    private LocalDateTime orderTime;
 
     /**
      * 结账时间
      */
-    private LocalDateTime checkout_time;
+    @TableField(value = "checkout_time")
+    private LocalDateTime checkoutTime;
 
     /**
      * 支付方式 1微信,2支付宝
      */
-    private Integer pay_method;
+    @TableField(value = "pay_method")
+    private Integer payMethod;
 
     /**
      * 实收金额
@@ -79,7 +87,8 @@ public class Orders implements Serializable {
 
     private String address;
 
-    private String user_name;
+    @TableField("user_name")
+    private String userName;
 
     private String consignee;
 

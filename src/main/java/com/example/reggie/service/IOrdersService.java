@@ -1,5 +1,6 @@
 package com.example.reggie.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.reggie.domain.Orders;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,4 +14,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IOrdersService extends IService<Orders> {
 
+     void submit(Orders order) throws Exception;
+     Page<Orders> userPage(Integer page,Integer pageSize);
 }

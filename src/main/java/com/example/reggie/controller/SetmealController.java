@@ -60,7 +60,7 @@ public class SetmealController {
 
         List<Setmeal_dish> setmealDishes = setmealDto.getSetmealDishes();
         setmealDishes.stream().map((item) -> {
-            item.setSetmeal_id(setmealId);
+            item.setSetmealId(setmealId);
             return item;
         }).collect(Collectors.toList());
         setmeal_dishService.saveBatch(setmealDishes);
@@ -79,7 +79,7 @@ public class SetmealController {
         //获取查询出的套餐信息id
         Long setmealId = setmeal.getId();
         LambdaQueryWrapper<Setmeal_dish> wrapper = new LambdaQueryWrapper();
-        wrapper.eq(Setmeal_dish::getSetmeal_id, setmealId);
+        wrapper.eq(Setmeal_dish::getSetmealId, setmealId);
 
         //查询套餐中的菜品
         List<Setmeal_dish> list = setmeal_dishService.list(wrapper);
@@ -93,12 +93,12 @@ public class SetmealController {
 
         Long id = setmealDto.getId();
         LambdaQueryWrapper<Setmeal_dish> query = new LambdaQueryWrapper();
-        query.eq(Setmeal_dish::getSetmeal_id, id);
+        query.eq(Setmeal_dish::getSetmealId, id);
         setmeal_dishService.remove(query);
 
         List<Setmeal_dish> setmealDishes = setmealDto.getSetmealDishes();
         setmealDishes.stream().map((item) -> {
-            item.setSetmeal_id(String.valueOf(id));
+            item.setSetmealId(String.valueOf(id));
             return item;
         }).collect(Collectors.toList());
 
@@ -113,10 +113,17 @@ public class SetmealController {
         updateWrapper.set(Setmeal::getStatus,status);
         updateWrapper.set(Setmeal::getUpdateTime, LocalDateTime.now());
         Long id = BeasContext.getCurrentId();
-        updateWrapper.set(Setmeal::getUpdate_user,id);
+        updateWrapper.set(Setmeal::getUpdateUser,id);
         setmealService.update(updateWrapper);
         log.info("修改状态成功");
         return R.success("修改成功");
     }
-
+    @GetMapping("/list")
+    public R<List<Setmeal>> list(@RequestParam Long categoryId,@RequestParam Integer status){
+        LambdaQueryWrapper<Setmeal> wrapper = new LambdaQueryWrapper();
+        wrapper.eq(Setmeal::getCategoryId,categoryId);
+        wrapper.eq(Setmeal::getStatus,status);
+        List<Setmeal> list = setmealService.list(wrapper);
+        return R.success(list);
+    }
 }

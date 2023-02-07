@@ -1,6 +1,8 @@
 package com.example.reggie.domain;
 
 import java.math.BigDecimal;
+
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -52,12 +54,14 @@ public class Order_detail implements Serializable {
     /**
      * 套餐id
      */
-    private Long setmeal_id;
+    @TableField(value ="setmeal_id")
+    private Long setmealId;
 
     /**
      * 口味
      */
-    private String dish_flavor;
+    @TableField(value = "dish_flavor")
+    private String dishFlavor;
 
     /**
      * 数量

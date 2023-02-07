@@ -33,7 +33,8 @@ public class Setmeal_dish implements Serializable {
     /**
      * 套餐id 
      */
-    private String setmeal_id;
+    @TableField("setmeal_id")
+    private String setmealId;
 
     /**
      * 菜品id
@@ -64,8 +65,8 @@ public class Setmeal_dish implements Serializable {
     /**
      * 创建时间
      */
-    @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime create_time;
+    @TableField(fill = FieldFill.INSERT,value = "create_time")
+    private LocalDateTime createTime;
 
     /**
      * 更新时间
@@ -76,19 +77,20 @@ public class Setmeal_dish implements Serializable {
     /**
      * 创建人
      */
-    @TableField(fill = FieldFill.INSERT)
-    private Long create_user;
+    @TableField(fill = FieldFill.INSERT,value = "create_user")
+    private Long createUser;
 
     /**
      * 修改人
      */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Long update_user;
+    @TableField(fill = FieldFill.INSERT_UPDATE,value = "update_user")
+    private Long updateUser;
 
     /**
      * 是否删除
      */
-    private Integer is_deleted;
+    @TableField("is_deleted")
+    private Integer isDeleted;
 
 
 }

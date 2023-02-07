@@ -1,10 +1,10 @@
 package com.example.reggie.domain;
 
 import java.math.BigDecimal;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
+
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.time.LocalDateTime;
-import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -28,13 +28,16 @@ public class Shopping_cart implements Serializable {
     private Long id;
     private String name;
     private String image;
-    private Long user_id;
-    private Long dish_id;
-    private Long setmeal_id;
-    private String dish_flavor;
+    @TableField("user_id")
+    private Long userId;
+    @TableField("dish_id")
+    private Long dishId;
+    @TableField("setmeal_id")
+    private Long setmealId;
+    @TableField("dish_flavor")
+    private String dishFlavor;
     private Integer number;
     private BigDecimal amount;
-    private LocalDateTime create_time;
-
-
+    @TableField("create_time")
+    private LocalDateTime createTime;
 }

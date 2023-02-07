@@ -69,8 +69,8 @@ public class Employee implements Serializable {
      * @TableField(fill = FieldFill.INSERT)
      * 将该字段设置为公共数据，在添加操作时在元数据对象处理类（MyMetaObjectHandler）中统一处理
      */
-    @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime create_time;
+    @TableField(fill = FieldFill.INSERT,value = "create_time")
+    private LocalDateTime createTime;
 
     /**
      * 更新时间
@@ -85,16 +85,16 @@ public class Employee implements Serializable {
      * @TableField(fill = FieldFill.INSERT)
      * 将该字段设置为公共数据，在添加操作时在元数据对象处理类（MyMetaObjectHandler）中统一处理
      */
-    @TableField(fill = FieldFill.INSERT)
-    private Long create_user;
+    @TableField(fill = FieldFill.INSERT,value = "create_user")
+    private Long createUser;
 
     /**
      * 修改人
      * @TableField(fill = FieldFill.INSERT_UPDATE)
      * 将该字段设置为公共数据，在添加和修改时操作时在元数据对象处理类（MyMetaObjectHandler）中统一处理
      */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Long update_user;
+    @TableField(fill = FieldFill.INSERT_UPDATE,value = "update_user")
+    private Long updateUser;
 
 
 }

@@ -46,8 +46,8 @@ public class Category implements Serializable {
     /**
      * 创建时间
      */
-    @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime create_time;
+    @TableField(fill = FieldFill.INSERT,value = "create_time")
+    private LocalDateTime createTime;
 
     /**
      * 更新时间
@@ -58,14 +58,14 @@ public class Category implements Serializable {
     /**
      * 创建人
      */
-    @TableField(fill = FieldFill.INSERT)
-    private Long create_user;
+    @TableField(fill = FieldFill.INSERT,value = "create_user")
+    private Long createUser;
 
     /**
      * 修改人
      */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Long update_user;
+    @TableField(fill = FieldFill.INSERT_UPDATE,value = "update_user")
+    private Long updateUser;
 
 
 }
