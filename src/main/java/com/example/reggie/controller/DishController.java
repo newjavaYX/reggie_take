@@ -3,6 +3,7 @@ package com.example.reggie.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.reggie.common.R;
 import com.example.reggie.dao.Dish_flavorDao;
@@ -105,6 +106,14 @@ public class DishController {
             return dishDto;
         }).collect(Collectors.toList());
         return R.success(collect);
+    }
+    @Transactional
+    @DeleteMapping
+    public void delete(@RequestParam("ids") Long id){
+        dishService.removeById(id);
+        LambdaUpdateWrapper<Dish_flavor> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(Dish_flavor::getDishId,id);
+        dishFlavorService.remove(wrapper);
     }
 }
 
