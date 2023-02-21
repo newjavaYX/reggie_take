@@ -109,11 +109,12 @@ public class DishController {
     }
     @Transactional
     @DeleteMapping
-    public void delete(@RequestParam("ids") Long id){
+    public R<String> delete(@RequestParam("ids") Long id){
         dishService.removeById(id);
         LambdaUpdateWrapper<Dish_flavor> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(Dish_flavor::getDishId,id);
         dishFlavorService.remove(wrapper);
+        return R.success("删除成功");
     }
 }
 
