@@ -3,7 +3,6 @@ package com.example.reggie.common;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
-import org.apache.ibatis.reflection.factory.ObjectFactory;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -40,6 +39,6 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         Long id = BeasContext.getCurrentId();
         log.info("《--更新--》:当前用户id:{}",id);
         metaObject.setValue("updateTime", LocalDateTime.now());
-        metaObject.setValue("update_user",id);
+        metaObject.setValue("updateUser",id);
     }
 }

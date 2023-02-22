@@ -1,11 +1,11 @@
 package com.example.reggie.domain;
 
 import com.baomidou.mybatisplus.annotation.*;
-
-import java.time.LocalDateTime;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -48,7 +48,7 @@ public class Dish_flavor implements Serializable {
      * 创建时间
      */
     @TableField(fill=FieldFill.INSERT,value = "create_time")
-    private LocalDateTime create_time;
+    private LocalDateTime createTime;
 
     /**
      * 更新时间

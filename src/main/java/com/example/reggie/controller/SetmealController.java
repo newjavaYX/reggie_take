@@ -12,15 +12,15 @@ import com.example.reggie.dto.SetmealDto;
 import com.example.reggie.service.impl.SetmealServiceImpl;
 import com.example.reggie.service.impl.Setmeal_dishServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.logging.Log;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import javax.websocket.server.PathParam;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -35,6 +35,8 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/setmeal")
 public class SetmealController {
+    @Autowired
+    private RedisTemplate redisTemplate;
     @Autowired
     private SetmealServiceImpl setmealService;
 
@@ -103,11 +105,18 @@ public class SetmealController {
         }).collect(Collectors.toList());
 
         setmeal_dishService.saveBatch(setmealDishes);
+
+        Setmeal byId = setmealService.getById(id);
+        Long categoryId = byId.getCategoryId();
+        redisTemplate.delete("setmeal_"+categoryId+"_"+byId.getStatus());
         return R.success("更新成功");
     }
 
     @PostMapping("/status/{status}")
     public R<String> updateStatus(@PathVariable Integer status, @RequestParam("ids") String ids){
+        Setmeal byId = setmealService.getById(ids);
+        Long categoryId = byId.getCategoryId();
+
         LambdaUpdateWrapper<Setmeal> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.eq(Setmeal::getId,ids);
         updateWrapper.set(Setmeal::getStatus,status);
@@ -116,14 +125,25 @@ public class SetmealController {
         updateWrapper.set(Setmeal::getUpdateUser,id);
         setmealService.update(updateWrapper);
         log.info("修改状态成功");
+        redisTemplate.delete("setmeal_" + categoryId + "_" + 1);
         return R.success("修改成功");
     }
+
     @GetMapping("/list")
     public R<List<Setmeal>> list(@RequestParam Long categoryId,@RequestParam Integer status){
+        String key = "setmeal_" + categoryId + "_" + status;
+        List<Setmeal> setmeals = (List<Setmeal>) redisTemplate.opsForValue().get(key);
+        if (setmeals != null) {
+            return R.success(setmeals);
+        }
+
         LambdaQueryWrapper<Setmeal> wrapper = new LambdaQueryWrapper();
         wrapper.eq(Setmeal::getCategoryId,categoryId);
         wrapper.eq(Setmeal::getStatus,status);
         List<Setmeal> list = setmealService.list(wrapper);
+
+        redisTemplate.opsForValue().set(key,list,60, TimeUnit.MINUTES);
+
         return R.success(list);
     }
 }

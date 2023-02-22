@@ -2,12 +2,9 @@ package com.example.reggie.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.reggie.common.R;
-import com.example.reggie.dao.Dish_flavorDao;
-import com.example.reggie.domain.Category;
 import com.example.reggie.domain.Dish;
 import com.example.reggie.domain.Dish_flavor;
 import com.example.reggie.dto.DishDto;
@@ -16,11 +13,12 @@ import com.example.reggie.service.impl.Dish_flavorServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import javax.naming.InsufficientResourcesException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -36,10 +34,14 @@ import java.util.stream.Collectors;
 @RequestMapping("/dish")
 public class DishController {
 
+
     @Autowired
     private DishServiceImpl dishService;
     @Autowired
     private Dish_flavorServiceImpl dishFlavorService;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
     @GetMapping("/page")
     public R<Page> getDishPage(Integer page, Integer pageSize,String name){
         log.info("============="+page + "---" +pageSize + " ---" +name);
@@ -50,6 +52,8 @@ public class DishController {
     @PostMapping
     public R<String> saveDish(@RequestBody DishDto dishDto){
         dishService.saveWhitFlavor(dishDto);
+        Long categoryId = dishDto.getCategoryId();
+        redisTemplate.delete("dish_"+categoryId+"_1");
         return R.success("保存成功");
     }
 
@@ -85,17 +89,28 @@ public class DishController {
         log.info("重新保存口味");
         dishFlavorService.saveBatch(flavors);
 
+        Long categoryId = dishDto.getCategoryId();
+        redisTemplate.delete("dish_"+categoryId+"_1");
 
         return R.success("修改成功");
     }
 
     @GetMapping("/list")
     public R<List<DishDto>> listDish(Long categoryId){
+        List<DishDto> collect;
+        String key = "dish_"+categoryId+"_1";
+        collect= (List<DishDto>) redisTemplate.opsForValue().get(key);
+        log.info("<<----------------  Key="+key+"------------------>>");
+        if (collect != null){
+            return R.success(collect);
+        }
+
         LambdaQueryWrapper<Dish> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Dish::getCategoryId,categoryId);
+        queryWrapper.eq(Dish::getStatus,1);
         List<Dish> list = dishService.list(queryWrapper);
 
-        List<DishDto> collect = list.stream().map(item -> {
+        collect = list.stream().map(item -> {
             Long id = item.getId();
             LambdaQueryWrapper<Dish_flavor> wrapper = new LambdaQueryWrapper<>();
             wrapper.eq(Dish_flavor::getDishId, id);
@@ -105,15 +120,24 @@ public class DishController {
             BeanUtils.copyProperties(item, dishDto);
             return dishDto;
         }).collect(Collectors.toList());
+
+        redisTemplate.opsForValue().set(key,collect,60, TimeUnit.MINUTES);
         return R.success(collect);
     }
     @Transactional
     @DeleteMapping
     public R<String> delete(@RequestParam("ids") Long id){
+        log.info("<----------------------删除 id ="+ id+"-------------------->");
+        Dish d = dishService.getById(id);
+        Long categoryId = d.getCategoryId();
+
         dishService.removeById(id);
+
         LambdaUpdateWrapper<Dish_flavor> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(Dish_flavor::getDishId,id);
         dishFlavorService.remove(wrapper);
+
+        redisTemplate.delete("dish_"+categoryId+"_1");
         return R.success("删除成功");
     }
 }
