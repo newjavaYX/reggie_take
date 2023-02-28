@@ -1,11 +1,11 @@
 package com.example.reggie.domain;
 
 import com.baomidou.mybatisplus.annotation.*;
-
-import java.time.LocalDateTime;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -95,6 +95,4 @@ public class Employee implements Serializable {
      */
     @TableField(fill = FieldFill.INSERT_UPDATE,value = "update_user")
     private Long updateUser;
-
-
 }

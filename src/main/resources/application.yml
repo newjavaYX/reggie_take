@@ -4,12 +4,38 @@ spring:
   application:
 #    应用名称
     name: reggie
-  datasource:
-    druid:
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://127.0.0.1:3306/reggie?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
-      username: root
-      password: 123456
+  shardingsphere:
+    datasource:
+      #设置多个数据库
+      names: master,slave
+      # 主库
+      master:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://192.168.164.100:3306/reggie?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+        username: root
+        password: root
+      # 从库
+      slave:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://192.168.164.131:3306/reggie?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+        username: root
+        password: root
+    masterslave:
+      # 查询机制
+      load-balance-algorithm-type: round_robin
+      # 数据源名称
+      name: dataSource
+      # 设置主库
+      master-data-source-name: master
+      # 设置从库 ，可以多个用，分开
+      slave-data-source-names: slave
+    props:
+      sql:
+        show: true #开启SQL显示，默认false
+  main:
+    allow-bean-definition-overriding: true
   data:
     redis:
       host: localhost
