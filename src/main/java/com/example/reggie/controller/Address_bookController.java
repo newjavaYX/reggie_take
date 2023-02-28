@@ -38,12 +38,13 @@ public class Address_bookController {
         address_bookService.save(address_book);
         return R.success("保存成功");
     }
+
     @GetMapping("/list")
     public R<List<Address_book>> list(){
         Long userid = BeasContext.getCurrentId();
         LambdaQueryWrapper<Address_book> wrapper = new LambdaQueryWrapper();
         wrapper.eq(Address_book::getUserId, userid);
-        List<Address_book> addressbookList = address_bookService.list();
+        List<Address_book> addressbookList = address_bookService.list(wrapper);
         return  R.success(addressbookList);
     }
 
@@ -57,9 +58,9 @@ public class Address_bookController {
             LambdaUpdateWrapper<Address_book> updateWrapper2 = new LambdaUpdateWrapper();
             updateWrapper2.eq(Address_book::getId, id.getId());
             updateWrapper2.set(Address_book::getIsDefault, 1);
-            updateWrapper.set(Address_book::getUpdateTime, LocalDateTime.now());
+            updateWrapper2.set(Address_book::getUpdateTime, LocalDateTime.now());
             Long userId = BeasContext.getCurrentId();
-            updateWrapper.set(Address_book::getUpdateUser, userId);
+            updateWrapper2.set(Address_book::getUpdateUser, userId);
             address_bookService.update(updateWrapper2);
             Address_book byId = address_bookService.getById(id);
             return R.success(byId);
@@ -68,6 +69,8 @@ public class Address_bookController {
     @GetMapping("/{id}")
     public R<Address_book> getAddressBook(@PathVariable Long id){
         LambdaQueryWrapper<Address_book> Wrapper = new LambdaQueryWrapper<>();
+        Long currentId = BeasContext.getCurrentId();
+        Wrapper.eq(Address_book::getUserId,currentId);
         Wrapper.eq(Address_book::getId,id);
         Address_book byId = address_bookService.getOne(Wrapper);
         return R.success(byId);
@@ -83,9 +86,12 @@ public class Address_bookController {
     @DeleteMapping
     public R<String> delete(@RequestParam("ids") Long ids){
         LambdaQueryWrapper<Address_book> queryWrapper = new LambdaQueryWrapper();
+        Long currentId = BeasContext.getCurrentId();
+        queryWrapper.eq(Address_book::getUserId,currentId);
         queryWrapper.eq(Address_book::getId,ids);
         Address_book one = address_bookService.getOne(queryWrapper);
         LambdaUpdateWrapper<Address_book> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(Address_book::getUserId,currentId);
         wrapper.eq(Address_book::getId,ids);
         address_bookService.remove(wrapper);
         if (one.getIsDefault()==1){
@@ -93,6 +99,7 @@ public class Address_bookController {
             Address_book address_book = list.get(0);
             Long id = address_book.getId();
             LambdaUpdateWrapper<Address_book> updateWrapper = new LambdaUpdateWrapper();
+            updateWrapper.eq(Address_book::getUserId,currentId);
             updateWrapper.eq(Address_book::getId,id);
             updateWrapper.set(Address_book::getIsDefault,1);
             address_bookService.update(updateWrapper);
@@ -103,6 +110,8 @@ public class Address_bookController {
     @GetMapping("/default")
     public R<Address_book> getDefault() {
         LambdaQueryWrapper<Address_book> wrapper = new LambdaQueryWrapper<>();
+        Long currentId = BeasContext.getCurrentId();
+        wrapper.eq(Address_book::getUserId,currentId);
         wrapper.eq(Address_book::getIsDefault,1);
         Address_book one = address_bookService.getOne(wrapper);
         return R.success(one);
