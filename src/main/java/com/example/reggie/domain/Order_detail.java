@@ -1,14 +1,14 @@
 package com.example.reggie.domain;
 
-import java.math.BigDecimal;
-
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * <p>
@@ -26,6 +26,7 @@ public class Order_detail implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
+     *
      * 主键
      */
     @TableId(value = "id", type = IdType.ASSIGN_ID)
